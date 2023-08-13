@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf ./build && tsc",
     "start": "npm run build && node build/app.js",
-    "start:dev": "npx nodemon",
+    "start:dev": "npx nodemon -q",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],
