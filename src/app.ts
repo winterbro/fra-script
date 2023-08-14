@@ -1,12 +1,23 @@
-import { LogLevel, Logger } from "./utils/logger";
+import Bybit from "./services/bybit";
+import Logger from "./utils/logger";
+import { LogLevel } from "./types/logger";
 
-const logger = new Logger(LogLevel.DEBUG);
+const logger = new Logger(LogLevel.INFO);
 
 async function main() {
-  logger.debug("Initializing application... logged as debug");
-  logger.info("Initializing application... logged as info");
-  logger.warning("Initializing application... logged as warning");
-  logger.error("Initializing application... logged as error");
+  logger.info("---------------------------");
+  logger.info("Initializing application...");
+  logger.info("---------------------------");
+
+  const bybit = new Bybit();
+
+  const serverTime = await bybit.getServerTime();
+  const btcusdt = await bybit.getTicker("BTCUSDT");
+  const btcPrice = await bybit.getLastPrice("BTCUSDT");
+
+  logger.info("Server time:", new Date(+serverTime * 1000));
+  logger.info("BTCUSDT Ticker:", btcusdt);
+  logger.info("btcPrice:", btcPrice);
 }
 
 main();
