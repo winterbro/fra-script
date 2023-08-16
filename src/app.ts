@@ -1,6 +1,8 @@
 import Bybit from "./services/bybit";
+import loadEnvVariable from "./utils/env";
 import Logger from "./utils/logger";
 import { LogLevel } from "./types/logger";
+import { BybitOptions } from "./types/bybit";
 
 const logger = new Logger(LogLevel.INFO);
 
@@ -9,7 +11,13 @@ async function main() {
   logger.info("Initializing application...");
   logger.info("---------------------------");
 
-  const bybit = new Bybit();
+  const bybitOptions = {
+    apiKey: loadEnvVariable("BYBIT_API_KEY"),
+    apiSecret: loadEnvVariable("BYBIT_API_SECRET"),
+    baseUrl: loadEnvVariable("BYBIT_BASE_URL")
+  };
+
+  const bybit = new Bybit(bybitOptions);
 
   const serverTime = await bybit.getServerTime();
   const btcusdt = await bybit.getTicker("BTCUSDT");

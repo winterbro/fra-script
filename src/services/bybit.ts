@@ -1,6 +1,5 @@
 
 import Client from "../lib/axios";
-import loadEnvVariable from "../utils/env";
 import Logger from "../utils/logger";
 import { LogLevel } from "../types/logger";
 import {
@@ -8,6 +7,7 @@ import {
   ResultList,
   ServerTime,
   TickerData,
+  BybitOptions
 } from "../types/bybit";
 
 class Bybit {
@@ -19,11 +19,11 @@ class Bybit {
   private recvWindow: string;
   private client: Client;
 
-  constructor() {
+  constructor(bybitOptions: BybitOptions) {
     this.logger = new Logger(LogLevel.INFO);
-    this.baseUrl = loadEnvVariable("BYBIT_BASE_URL");
-    this.key = loadEnvVariable("BYBIT_API_KEY");
-    this.secret = loadEnvVariable("BYBIT_API_SECRET");
+    this.baseUrl = bybitOptions.baseUrl;
+    this.key = bybitOptions.apiKey;
+    this.secret = bybitOptions.apiSecret;
     this.timestamp = Date.now().toString();
     this.recvWindow = "5000";
     this.client = new Client(this.baseUrl);

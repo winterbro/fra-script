@@ -1,3 +1,9 @@
+export interface BybitOptions {
+  apiKey: string;
+  apiSecret: string;
+  baseUrl: string;
+}
+
 export interface ClientResponse<T> {
   ret_code: number;
   ret_msg: "OK" | string;
