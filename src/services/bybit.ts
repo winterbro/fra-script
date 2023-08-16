@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import Client from "../lib/axios";
 import Logger from "../utils/logger";
 import { LogLevel } from "../types/logger";
@@ -7,6 +8,8 @@ import {
   ResultList,
   ServerTime,
   TickerData,
+  AccountType,
+  WalletBalanceItem,
 } from "../types/bybit";
 
 class Bybit {
@@ -33,6 +36,45 @@ class Bybit {
       "X-BAPI-RECV-WINDOW": this.recvWindow,
       "Content-Type": "application/json",
     });
+  }
+
+  private getSignature(parameters: string): string {
+    return crypto
+      .createHmac("sha256", this.secret)
+      .update(this.timestamp + this.key + this.recvWindow + parameters)
+      .digest("hex");
+  }
+
+  public async getAccountBalance(
+    accountType: AccountType = AccountType.UNIFIED,
+    coin?: string | string[],
+  ): Promise<WalletBalanceItem> {
+    try {
+      if (!accountType) {
+        throw new Error(`Account type is required.`);
+      }
+
+      this.logger.debug("Requesting account balance...");
+
+      const parameters = `accountType=${accountType}${
+        coin ? `&coin=${coin}` : ""
+      }`;
+      const sign = this.getSignature(parameters);
+
+      this.client.setHeaders({
+        "X-BAPI-SIGN": sign,
+      });
+
+      const response: ClientResponse<ResultList<WalletBalanceItem>> =
+        await this.client.get(`/v5/account/wallet-balance?${parameters}`);
+
+      this.logger.warning("Account balance:", response);
+
+      return response.result.list[0];
+    } catch (error) {
+      this.logger.error("Error requesting account balance:", error);
+      return Promise.reject(error);
+    }
   }
 
   public async getServerTime(): Promise<string> {

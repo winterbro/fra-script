@@ -3,6 +3,7 @@ import Logger from "./utils/logger";
 import { LogLevel } from "./types/logger";
 import Bybit from "./services/bybit";
 import { BybitOptions } from "./types/bybit";
+// import { AccountType } from "./types/bybit";
 
 const logger = new Logger(LogLevel.INFO);
 
@@ -14,7 +15,7 @@ async function main() {
   const bybitOptions: BybitOptions = {
     apiKey: loadEnvVariable("BYBIT_API_KEY"),
     apiSecret: loadEnvVariable("BYBIT_API_SECRET"),
-    baseUrl: loadEnvVariable("BYBIT_BASE_URL")
+    baseUrl: loadEnvVariable("BYBIT_BASE_URL"),
   };
 
   const bybit = new Bybit(bybitOptions);
@@ -26,6 +27,12 @@ async function main() {
   logger.info("Server time:", new Date(+serverTime * 1000));
   logger.info("BTCUSDT Ticker:", btcusdt);
   logger.info("btcPrice:", btcPrice);
+
+  // const accountBalance = await bybit.getAccountBalance(
+  //   AccountType.UNIFIED,
+  //   "USDT",
+  // );
+  // logger.info("Account balance:", accountBalance);
 }
 
 main();

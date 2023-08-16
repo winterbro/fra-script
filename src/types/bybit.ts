@@ -46,3 +46,45 @@ export interface TickerData<T = object> extends ClientResponse<ResultList<T>> {
   deliveryTime: string;
   openInterestValue: string;
 }
+
+export enum AccountType {
+  UNIFIED = "UNIFIED",
+  CONTRACT = "CONTRACT",
+  SPOT = "SPOT",
+}
+
+export interface WalletBalanceItem<T = object>
+  extends ClientResponse<ResultList<T>> {
+  totalEquity: string;
+  accountIMRate: string;
+  totalMarginBalance: string;
+  totalInitialMargin: string;
+  accountType: string;
+  totalAvailableBalance: string;
+  accountMMRate: string;
+  totalPerpUPL: string;
+  totalWalletBalance: string;
+  accountLTV: string;
+  totalMaintenanceMargin: string;
+  coin: WalletCoin[];
+}
+
+export interface WalletCoin {
+  availableToBorrow: string;
+  bonus: string;
+  accruedInterest: string;
+  availableToWithdraw: string;
+  totalOrderIM: string;
+  equity: string;
+  totalPositionMM: string;
+  usdValue: string;
+  unrealisedPnl: string;
+  collateralSwitch: boolean;
+  borrowAmount: string;
+  totalPositionIM: string;
+  walletBalance: string;
+  cumRealisedPnl: string;
+  locked: string;
+  marginCollateral: boolean;
+  coin: string;
+}
